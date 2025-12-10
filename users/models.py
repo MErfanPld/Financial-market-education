@@ -57,6 +57,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     jcreated.short_description = "تاریخ ساخت"
 
 
+    def jupdated(self):
+        return jalali_converter(self.updated_at)
+    jupdated.short_description = "تاریخ بروز رسانی"
+
     def save(self, *args, **kwargs):
         if self.phone_number:
             self.phone_number = mobile_validator(
