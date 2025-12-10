@@ -13,7 +13,6 @@ class UserAdmin(BaseUserAdmin):
     list_display = (
         "phone_number",
         "get_full_name",
-        "show_image",
         "is_active",
         "is_staff",
         "is_superuser",
@@ -34,7 +33,6 @@ class UserAdmin(BaseUserAdmin):
                 "last_name",
                 "email",
                 "image",
-                "show_image",
             )
         }),
         ("دسترسی‌ها", {
@@ -64,12 +62,4 @@ class UserAdmin(BaseUserAdmin):
 
     ordering = ("-id",)
 
-    def show_image(self, obj):
-        if not obj.image:
-            return "-"
-        return format_html(
-            '<img src="{}" style="width:50px;height:50px;border-radius:8px;object-fit:cover;">',
-            obj.image.url
-        )
-    show_image.short_description = "عکس"
 
