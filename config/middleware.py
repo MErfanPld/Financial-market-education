@@ -4,7 +4,11 @@ class APICorsMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
-        response["Access-Control-Allow-Origin"] = "*"
-        response["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-        response["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        
+        # پیکربندی CORS
+        response["Access-Control-Allow-Origin"] = "*"  # همه دامنه‌ها
+        response["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"  # متدهای مجاز
+        response["Access-Control-Allow-Headers"] = "Content-Type, Authorization, X-CSRFTOKEN"  # هدرهای مجاز
+        response["Access-Control-Allow-Credentials"] = "true"  # اگر نیاز به ارسال کوکی‌ها دارید
+        
         return response
