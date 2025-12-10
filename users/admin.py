@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.hashers import make_password
 from django.utils.html import format_html
 from django.utils.timezone import localtime
 from .models import User
@@ -30,7 +31,7 @@ class UserAdmin(admin.ModelAdmin):
     fieldsets = (
         ("مشخصات کاربر", {
             "fields": (
-                "first_name", "last_name", "phone_number","email",'password',
+                "first_name", "last_name", "phone_number", "email", "password",
                 "image"
             )
         }),
@@ -42,11 +43,13 @@ class UserAdmin(admin.ModelAdmin):
         }),
     )
 
-    # --- جلوگیری از باگ ذخیره شماره موبایل تکراری ---
     def save_model(self, request, obj, form, change):
         try:
+            if 'password' in form.changed_data:
+                obj.password = make_password(obj.password)
+
             super().save_model(request, obj, form, change)
+
         except Exception as e:
             from django.contrib import messages
             messages.error(request, f"❌ خطا: {e}")
-
