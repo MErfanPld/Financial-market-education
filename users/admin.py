@@ -41,9 +41,9 @@ class UserAdmin(BaseUserAdmin):
         ("رمز عبور", {
             "fields": ("password", "new_password")
         }),
-        ("تاریخ‌ها", {
-            "fields": ("jcreated", "jupdated"),
-        }),
+        # ("تاریخ‌ها", {
+        #     "fields": ("jcreated", "jupdated"),
+        # }),
     )
 
     add_fieldsets = (
