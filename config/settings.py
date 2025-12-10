@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware', 
-    'config.middleware.APICorsMiddleware',
+    # 'config.middleware.APICorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -171,10 +171,11 @@ CORS_ALLOW_METHODS = [
 CORS_ALLOW_HEADERS = [
     "content-type",
     "authorization",
-    "x-requested-with"
+    "x-requested-with",
+    "X-CSRFTOKEN",
 ]
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000", ]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000", ]
 
 
 AUTH_USER_MODEL = "users.User"
