@@ -45,10 +45,12 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'drf_spectacular',
-
+    'ckeditor',
+    'ckeditor_uploader',
     
     'users',
     'accounts',
+    'articles',
 
 ]
 
@@ -212,4 +214,6 @@ AUTHENTICATION_BACKENDS = [
     'accounts.helpers.EmailBackend',
     'accounts.helpers.PhoneNumberBackend',
 ]
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
