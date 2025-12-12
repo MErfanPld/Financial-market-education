@@ -1,5 +1,5 @@
 from rest_framework import generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from .models import Article, Category
 from .serializers import ArticleSerializer, CategorySerializer
 
@@ -14,7 +14,7 @@ class ArticleDetailView(generics.RetrieveAPIView):
     queryset = Article.objects.all().prefetch_related("sections", "images", "category")
     serializer_class = ArticleSerializer
     lookup_field = "slug"
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class CategoryListView(generics.ListAPIView):
