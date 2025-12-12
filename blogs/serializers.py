@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Blog, Category, Tag, Author
+from .models import Blog, Category, Tag, Author,Comment
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -41,3 +41,23 @@ class BlogDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
         fields = "__all__"
+
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    replies = serializers.SerializerMethodField()
+    user_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        fields = ["id", "blog", "user", "user_name", "parent", "content", "is_approved", "created_at", "replies"]
+        read_only_fields = ["is_approved", "created_at", "replies", "user_name"]
+
+    def get_replies(self, obj):
+        qs = obj.children
+        return CommentSerializer(qs, many=True).data
+
+    def get_user_name(self, obj):
+        if obj.user:
+            return obj.user.get_full_name()
+        return "کاربر مهمان"

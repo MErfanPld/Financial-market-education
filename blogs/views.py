@@ -1,5 +1,5 @@
 from rest_framework import generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny,IsAuthenticatedOrReadOnly
 from .models import *
 from .serializers import *
 
@@ -21,3 +21,23 @@ class BlogDetailView(generics.RetrieveAPIView):
         blog.views += 1
         blog.save(update_fields=["views"])
         return super().get(request, *args, **kwargs)
+
+
+
+class CommentListCreateView(generics.ListCreateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        blog_id = self.kwargs.get("blog_id")
+        slug = self.kwargs.get("slug")
+        return Comment.objects.filter(
+            blog_id=blog_id, 
+            blog__slug=slug, 
+            parent=None, 
+            is_approved=True
+        ).select_related("user")
+
+    def perform_create(self, serializer):
+        blog_id = self.kwargs.get("blog_id")
+        serializer.save(user=self.request.user, blog_id=blog_id)

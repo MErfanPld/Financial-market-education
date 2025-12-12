@@ -115,3 +115,50 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+from django.conf import settings
+
+class Comment(models.Model):
+    blog = models.ForeignKey(
+        'Blog',
+        on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name="مقاله"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="کاربر"
+    )
+    parent = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='replies',
+        verbose_name="کامنت والد"
+    )
+    content = models.TextField(verbose_name="متن کامنت")
+    is_approved = models.BooleanField(default=True, verbose_name="تایید شده")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت")
+
+    class Meta:
+        verbose_name = "کامنت"
+        verbose_name_plural = "کامنت‌ها"
+        ordering = ('-created_at',)
+
+    def __str__(self):
+        return f"کامنت {self.id} - {self.blog.title}"
+
+    @property
+    def children(self):
+        return Comment.objects.filter(parent=self, is_approved=True)
+
+    @property
+    def is_parent(self):
+        return self.parent is None
+
