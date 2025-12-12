@@ -21,17 +21,17 @@ class CustomUserCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.password = make_password(self.cleaned_data["password1"])
+        user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
         return user
-
-
+    
+    
+    
+    
 class CustomUserChangeForm(forms.ModelForm):
-    password = ReadOnlyPasswordHashField(label="رمز عبور هش شده")
-
     new_password = forms.CharField(
-        label="رمز جدید (اختیاری)",
+        label="رمز جدید",
         widget=forms.PasswordInput,
         required=False
     )
@@ -47,16 +47,12 @@ class CustomUserChangeForm(forms.ModelForm):
             "is_active",
             "is_staff",
             "is_superuser",
-            "password",
         )
 
     def save(self, commit=True):
         user = super().save(commit=False)
-
-        np = self.cleaned_data.get("new_password")
-        if np:
-            user.password = make_password(np)
-
+        if self.cleaned_data.get("new_password"):
+            user.set_password(self.cleaned_data["new_password"])
         if commit:
             user.save()
         return user
