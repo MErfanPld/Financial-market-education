@@ -14,7 +14,7 @@ class ArticleDetailView(generics.RetrieveAPIView):
     queryset = Article.objects.all().prefetch_related("sections", "images", "category")
     serializer_class = ArticleSerializer
     lookup_field = "slug"
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
 
 class CategoryListView(generics.ListAPIView):
