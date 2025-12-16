@@ -66,8 +66,9 @@ class LoginView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         phone_number = serializer.validated_data['phone_number']
         password = serializer.validated_data['password']
+
         user = authenticate(request, phone_number=phone_number, password=password)
-        if user is not None:
+        if user:
             refresh = RefreshToken.for_user(user)
             return Response({
                 'refresh': str(refresh),
@@ -75,7 +76,6 @@ class LoginView(GenericAPIView):
                 'user': UserSerializer(user).data
             })
         return Response({'error': 'شماره تلفن یا رمز عبور اشتباه است'}, status=status.HTTP_401_UNAUTHORIZED)
-
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]

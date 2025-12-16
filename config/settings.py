@@ -215,6 +215,7 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = [
     'accounts.helpers.EmailBackend',
     'accounts.helpers.PhoneNumberBackend',
+    'accounts.backends.PhoneBackend',
 ]
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
