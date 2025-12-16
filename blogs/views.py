@@ -1,5 +1,9 @@
 from rest_framework import generics
 from rest_framework.permissions import AllowAny,IsAuthenticatedOrReadOnly
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+
+from blogs.filters import BlogFilter
 from .models import *
 from .serializers import *
 
@@ -8,7 +12,10 @@ class BlogListView(generics.ListAPIView):
     queryset = Blog.objects.select_related("author", "category").prefetch_related("tags")
     serializer_class = BlogListSerializer
     permission_classes = [AllowAny]
-
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_class = BlogFilter
+    search_fields = ['title', 'excerpt', 'content', 'author__first_name', 'author__last_name', 'category__name']
+    ordering_fields = ['created_at', 'views']
 
 class BlogDetailView(generics.RetrieveAPIView):
     queryset = Blog.objects.all()
