@@ -216,6 +216,7 @@ AUTHENTICATION_BACKENDS = [
     'accounts.helpers.EmailBackend',
     'accounts.helpers.PhoneNumberBackend',
     'accounts.backends.PhoneBackend',
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
