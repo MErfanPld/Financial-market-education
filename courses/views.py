@@ -8,6 +8,7 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView,ListCreateAPIVi
 from rest_framework.permissions import AllowAny,IsAuthenticatedOrReadOnly
 from .models import Course, UserProgress,CourseComment
 from .serializers import CourseSerializer, UserProgressSerializer,CourseCommentSerializer
+from rest_framework.exceptions import NotFound
 
 
 class CourseListView(ListAPIView):
@@ -29,13 +30,14 @@ class CourseDetailView(RetrieveAPIView):
 
 class UserProgressView(RetrieveAPIView):
     serializer_class = UserProgressSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        return UserProgress.objects.get(
-            user=self.request.user,
-            course_id=self.kwargs["course_id"]
-        )
+        course_id = self.kwargs["course_id"]
+        try:
+            return UserProgress.objects.get(user=self.request.user, course_id=course_id)
+        except UserProgress.DoesNotExist:
+            raise NotFound("پیشرفت برای این دوره یافت نشد.")
 
 
 class CompleteLessonView(APIView):
