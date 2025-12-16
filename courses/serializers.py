@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Course, Instructor, Lesson, LessonProgress, Review, UserProgress
+from .models import Course, Instructor, Lesson, LessonProgress, Review, UserProgress,CourseComment
 
 
 class InstructorSerializer(serializers.ModelSerializer):
@@ -79,3 +79,17 @@ class LessonProgressSerializer(serializers.ModelSerializer):
             "is_completed",
         ]
         read_only_fields = ["id"]
+        
+
+class CourseCommentSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+    children = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CourseComment
+        fields = ['id', 'course', 'user', 'parent', 'content', 'is_approved', 'created_at', 'children']
+
+    def get_children(self, obj):
+        if obj.is_parent:
+            return CourseCommentSerializer(obj.children, many=True).data
+        return []

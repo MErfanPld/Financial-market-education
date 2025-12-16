@@ -66,3 +66,14 @@ class LessonProgressAdmin(admin.ModelAdmin):
     list_display = ("user", "lesson", "is_completed")
     list_filter = ("is_completed", "lesson__course")
     search_fields = ("user__username", "lesson__title")
+
+
+from django.contrib import admin
+from .models import CourseComment
+
+@admin.register(CourseComment)
+class CourseCommentAdmin(admin.ModelAdmin):
+    list_display = ("id", "course", "user", "parent", "is_approved", "created_at")
+    list_filter = ("is_approved", "created_at")
+    search_fields = ("user__username", "course__title", "content")
+    readonly_fields = ("created_at",)

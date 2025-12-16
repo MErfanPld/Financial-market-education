@@ -4,10 +4,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import LessonProgress
 from .serializers import LessonProgressSerializer
-from rest_framework.generics import ListAPIView, RetrieveAPIView
-from rest_framework.permissions import AllowAny
-from .models import Course, UserProgress
-from .serializers import CourseSerializer, UserProgressSerializer
+from rest_framework.generics import ListAPIView, RetrieveAPIView,ListCreateAPIView,RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import AllowAny,IsAuthenticatedOrReadOnly
+from .models import Course, UserProgress,CourseComment
+from .serializers import CourseSerializer, UserProgressSerializer,CourseCommentSerializer
 
 
 class CourseListView(ListAPIView):
@@ -62,3 +62,18 @@ class CompleteLessonView(APIView):
         )
 
 
+class CourseCommentListCreateView(ListCreateAPIView):
+    serializer_class = CourseCommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        course_id = self.kwargs.get("course_id")
+        return CourseComment.objects.filter(
+            course_id=course_id,
+            parent=None,
+            is_approved=True
+        ).select_related("user")
+
+    def perform_create(self, serializer):
+        course_id = self.kwargs.get("course_id")
+        serializer.save(user=self.request.user, course_id=course_id)

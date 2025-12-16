@@ -1,10 +1,5 @@
 from django.urls import path
-from .views import (
-    CourseListView,
-    CourseDetailView,
-    UserProgressView,
-    CompleteLessonView,
-)
+from .views import *
 
 urlpatterns = [
     path(
@@ -29,4 +24,5 @@ urlpatterns = [
         CompleteLessonView.as_view(),
         name="lesson-complete"
     ),
+    path('<int:course_id>/comments/', CourseCommentListCreateView.as_view(), name='coursecomment-list-create'),
 ]

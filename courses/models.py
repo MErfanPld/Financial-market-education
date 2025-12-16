@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.conf import settings
+
 
 User = get_user_model()
 
@@ -169,3 +171,47 @@ class UserProgress(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.course}"
+
+
+
+class CourseComment(models.Model):
+    course = models.ForeignKey(
+        'Course',
+        on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name="دوره"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="کاربر"
+    )
+    parent = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='replies',
+        verbose_name="کامنت والد"
+    )
+    content = models.TextField(verbose_name="متن کامنت")
+    is_approved = models.BooleanField(default=True, verbose_name="تایید شده")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت")
+
+    class Meta:
+        verbose_name = "کامنت دوره"
+        verbose_name_plural = "کامنت‌های دوره"
+        ordering = ('-created_at',)
+
+    def __str__(self):
+        return f"کامنت {self.id} - {self.course.title}"
+
+    @property
+    def children(self):
+        return CourseComment.objects.filter(parent=self, is_approved=True)
+
+    @property
+    def is_parent(self):
+        return self.parent is None
