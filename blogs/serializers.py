@@ -29,8 +29,8 @@ class BlogListSerializer(serializers.ModelSerializer):
         model = Blog
         fields = [
             "id", "title", "slug", "excerpt", "cover",
-            "author", "category", "tags", "reading_time", "created_at"
-        ]
+            "author", "category", "tags",'telegram','instagram','youtube','x' ,"reading_time", "created_at"
+            ]
 
 
 class BlogDetailSerializer(serializers.ModelSerializer):

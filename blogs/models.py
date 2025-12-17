@@ -88,6 +88,12 @@ class Blog(models.Model):
         blank=True,
         verbose_name="تصویر کاور"
     )
+    
+    telegram = models.URLField(verbose_name="لینک تلگرام",null=True,blank=True)
+    instagram = models.URLField(verbose_name="لینک اینستاگرام",null=True,blank=True)
+    youtube = models.URLField(verbose_name="لینک یوتیوب",null=True,blank=True)
+    x = models.URLField(verbose_name="لینک ایکس",null=True,blank=True)
+    video_link = models.URLField(verbose_name="لینک ویدیو اموزشی",null=True,blank=True)
 
     views = models.PositiveIntegerField(default=0, verbose_name="تعداد بازدید")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")

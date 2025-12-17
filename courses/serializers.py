@@ -45,6 +45,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "rating",
             "instructor",
             "lessons",
+            "course_level"
         ]
 
 

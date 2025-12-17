@@ -5,7 +5,7 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'password','first_name', 'last_name', 'phone_number',   'is_owner', 'is_active', 'is_staff',
+        fields = ['id', 'password','first_name', 'last_name', 'phone_number',   'email','is_owner', 'is_active', 'is_staff',
                   'image']
         read_only_fields = ['created_at', 'updated_at']
 
@@ -36,7 +36,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'phone_number', 'image']
+        fields = ['first_name', 'last_name', 'phone_number', 'email','image']
         read_only_fields = ['phone_number']
 
     def validate_email(self, value):
@@ -46,6 +46,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'phone_number', 'image', 'is_owner', 'is_superuser', 'is_staff', 'created_at', 'updated_at']
+        fields = ['id', 'first_name', 'last_name', 'phone_number', 'email','image', 'is_owner', 'is_superuser', 'is_staff', 'created_at', 'updated_at']
         
         

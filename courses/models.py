@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 
 User = get_user_model()
@@ -25,6 +26,12 @@ class Instructor(models.Model):
 
 
 class Course(models.Model):
+    LEVEL_TYPES = (
+        ('preliminary', _('مقدماتی')),
+        ('Medium', _('متوسط')),
+        ('advanced', _('پیشرفته')),
+    )
+    
     instructor = models.ForeignKey(
         Instructor,
         on_delete=models.CASCADE,
@@ -37,6 +44,13 @@ class Course(models.Model):
     )
     description = models.TextField(
         verbose_name="درباره دوره"
+    )
+    course_level = models.CharField(
+        _('سطح دوره'), 
+        max_length=20, 
+        blank=True,
+        null=True,
+        choices=LEVEL_TYPES
     )
     duration_weeks = models.PositiveIntegerField(
         verbose_name="مدت دوره (هفته)"
