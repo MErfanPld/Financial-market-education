@@ -14,7 +14,7 @@ class BlogListView(generics.ListAPIView):
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = BlogFilter
-    search_fields = ['title', 'excerpt', 'content', 'author__first_name', 'author__last_name', 'category__name']
+    search_fields = ['title', 'excerpt', 'content']
     ordering_fields = ['created_at', 'views']
 
 class BlogDetailView(generics.RetrieveAPIView):
