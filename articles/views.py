@@ -21,3 +21,11 @@ class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [AllowAny]
+
+class CategoryArticleListAPIView(generics.ListAPIView):
+    serializer_class = ArticleSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        slug = self.kwargs['slug']
+        return Article.objects.all()

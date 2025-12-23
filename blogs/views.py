@@ -2,7 +2,9 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny,IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from blogs.filters import BlogFilter
 from .models import *
 from .serializers import *
@@ -48,3 +50,15 @@ class CommentListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         blog_id = self.kwargs.get("blog_id")
         serializer.save(user=self.request.user, blog_id=blog_id)
+
+
+
+class CategoryBlogListAPIView(generics.ListAPIView):
+    serializer_class = BlogListSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        slug = self.kwargs['slug']
+        return Blog.objects.filter(
+            category__slug=slug
+        ).order_by('-created_at')

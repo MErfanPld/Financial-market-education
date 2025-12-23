@@ -9,4 +9,5 @@ urlpatterns = [
         CommentListCreateView.as_view(),
         name="blog-comments"
     ),
+    path('category/<slug:slug>/blogs/', CategoryBlogListAPIView.as_view(), name='category_blog_list'),
 ]
