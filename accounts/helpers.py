@@ -49,15 +49,10 @@ def check_reset_password_sent(user):
 
 class EmailBackend(BaseBackend):
     def authenticate(self, request, email=None, password=None, **kwargs):
-        try:
-            user = User.objects.get(email=email)
-            if user.check_password(password):
-                return user
-        except User.DoesNotExist:
+        if not email or not password:
             return None
 
-    def get_user(self, user_id):
-        try:
-            return User.objects.get(pk=user_id)
-        except User.DoesNotExist:
-            return None
+        user = User.objects.filter(email=email).first()
+        if user and user.check_password(password):
+            return user
+        return None
